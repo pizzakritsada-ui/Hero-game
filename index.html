@@ -4,99 +4,114 @@
   <head>
     <meta charset="UTF-8">
     <title>Untitled</title>
-    
+    <link rel="stylesheet" href="./style.css">
 
   </head>
     
   <body>
-  <!DOCTYPE html>
+  <!doctype html>
 
 <html lang="th">
 
 <head>
 
-  <meta charset="UTF-8">
+  <meta charset="utf-8"/>
 
-  <title>ระบบหลังบ้าน Hero Game</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+  <title>เกมบัญชีฮีโร่ ออนไลน์</title>
+
+  <link rel="stylesheet" href="style.css"/>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 </head>
 
 <body>
 
-  <h2>🏰 ระบบหลังบ้าน Hero Game</h2>
+  <div class="wrap">
 
-  <button id="resetBtn">รีอันดับทั้งหมด</button>
+    <header>
 
-  <div id="playerList">กำลังโหลด...</div>
+      <h1>⚔️ เกมบัญชีฮีโร่ ออนไลน์ ⚔️</h1>
 
-  <script type="module">
+    </header>
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    <div class="hud">
 
-    import { getDatabase, ref, get, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+      <div class="panel">ทอง: <span id="gold">0</span></div>
 
-    // 🔹 วาง config ของคุณตรงนี้
+      <div class="panel">HP ฮีโร่:
 
-    const firebaseConfig = {
+        <div class="hpbar"><div id="hpHeroBar" class="hpfill" style="background:#22c55e;width:100%"></div>
 
-      apiKey: "ใส่ของคุณตรงนี้",
+        <div id="hpHeroText" class="hptext">100/100</div></div>
 
-      authDomain: "ใส่ของคุณตรงนี้",
+      </div>
 
-      databaseURL: "ใส่ของคุณตรงนี้",
+      <div class="panel">HP บอส:
 
-      projectId: "ใส่ของคุณตรงนี้"
+        <div class="hpbar"><div id="hpBossBar" class="hpfill" style="background:#ef4444;width:100%"></div>
 
-    };
+        <div id="hpBossText" class="hptext">0/0</div></div>
 
-    const app = initializeApp(firebaseConfig);
+      </div>
 
-    const db = getDatabase(app);
+      <div class="panel">บัฟ: <span id="buffs">ไม่มี</span></div>
 
-    async function loadPlayers() {
+      <div class="panel">ด่าน: <span id="bossStage">1</span></div>
 
-      const snap = await get(ref(db, 'leaderboard'));
+    </div>
 
-      const data = snap.val() || {};
+    <canvas id="c" width="600" height="240"></canvas>
 
-      let html = '<ul>';
+    <div class="hud">
 
-      for (let name in data) {
+      <button id="startFight">เริ่มต่อสู้</button>
 
-        html += `<li>${name} : ${data[name].score}</li>`;
+      <button id="endFight">ยอมแพ้</button>
 
-      }
+    </div>
 
-      html += '</ul>';
+    <div id="shop" class="panel">
 
-      document.getElementById('playerList').innerHTML = html;
+      <h3>🏪 ร้านค้า</h3>
 
-    }
+      <div class="shop-item">ยาฟื้น HP (+50HP) - 30 ทอง <button class="btn-small" data-item="potion">ซื้อ</button></div>
 
-    async function resetLeaderboard() {
+      <div class="shop-item">ดาบหนัก (ตีแรงครั้งเดียว) - 80 ทอง <button class="btn-small" data-item="sword">ซื้อ</button></div>
 
-      if (confirm('รีอันดับทั้งหมดจริงไหม?')) {
+    </div>
 
-        await remove(ref(db, 'leaderboard'));
+    <div class="question" id="questionPanel" style="display:none;">
 
-        alert('รีอันดับเสร็จแล้ว');
+      <div id="qText"></div>
 
-        loadPlayers();
+      <div id="qChoices"></div>
 
-      }
+      <button id="answerBtn">ตอบ</button>
 
-    }
+      <button id="skipBtn">ข้าม (-20 HP)</button>
 
-    document.getElementById('resetBtn').addEventListener('click', resetLeaderboard);
+    </div>
 
-    loadPlayers();
+    <div class="log" id="log"></div>
 
-  </script>
+    <div id="leaderboard"></div>
+
+    <div class="victory" id="victory">🎉 ชนะ! 🎉</div>
+
+  </div>
+
+  <script src="script.js"></script>
 
 </body>
 
 </html>
-    
+    <script  src="./script.js"></script>
+
   </body>
   
 </html>
